@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Http
+@model System.Collections.Generic.List<WebDiscrete.Data.Entity.SystemObjectDto>
+@inject IHttpContextAccessor httpContextAccessor;
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@foreach (var obj in @Model)
+{
+    <li class="list-group-item list-group-item-action flex-column align-items-start">
+        <p class="mb-1">@obj.Name</p>
+        <p>
+            <strong>@String.Join(";", obj.AccessRights)</strong>
+        </p>
+    </li>
+
+    @if (obj.AccessRights.Contains(AccessRightType.GRANT))
+    {
+        <button class="btn btn-success">
+            @Html.ActionLink("Выдать права на объект", "GetObjectUserAccessTypes", new {objectId = obj.Id}, new {@class = "mb-1 text-white"})
+        </button>
+    }
+}
+
+@if (httpContextAccessor.HttpContext.User.HasClaim("Username", "Admin"))
+{
+    <form method="post" asp-action="SetRights">
+        <input type="submit" class="btn btn-success" value="Выставить права">
+    </form>
+}

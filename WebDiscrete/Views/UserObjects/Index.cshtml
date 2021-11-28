@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="text-center">Добро пожаловать, введите логин и пароль</h1>
+    <form asp-action="Login" method="post" asp-controller="UserObjects" asp-anti-forgery="true">
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div>
+            <div class="form-group">
+                <label  for="username"> Введите логин</label>
+                <input id="username" type="text" name="username"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Введите пароль</label>
+                <input id="password" name="password"/>
+            </div>
+            <input type="submit" class="btn btn-outline-dark"/>
+        </div>
+    </form>
+</div>

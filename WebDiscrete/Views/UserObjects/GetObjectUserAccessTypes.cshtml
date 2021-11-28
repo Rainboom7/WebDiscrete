@@ -1,0 +1,33 @@
+﻿@model WebDiscrete.Data.Entity.GetObjectAccessTypesResponse
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+
+}
+
+<h2>Уровни доступа пользователей к объекту @Model.ObjectDto.Name</h2>
+
+@foreach (var user in @Model.Users)
+{
+    var notGivenAccessTypes = Enum.GetValues(typeof(AccessRightType)).Cast<AccessRightType>()
+        .Where(o => !user.AccessRights.Contains(o)).ToList();
+    <li class="list-group-item list-group-item-action flex-column align-items-start">
+        <p class="mb-1">@user.Username</p>
+        <p class="mb-1">@user.FirstName + @user.LastName</p>
+        <p>
+            <strong>@String.Join(";", user.AccessRights)</strong>
+        </p>
+        <p class="flex-row">
+            @foreach (var right in notGivenAccessTypes)
+            {
+                <form method="post" asp-action="SetUserRights">
+                    <input type="hidden" name="accessRightType" value="@right">
+                    <input type="hidden" name="objId" value="@Model.ObjectDto.Id">
+                    <input type="hidden" name="targetUserId" value="@user.Id">
+                    <input type="submit" class="btn btn-success" value="Дать право @right">
+                </form>
+            }
+        </p>
+    </li>
+}
